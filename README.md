@@ -54,12 +54,12 @@ JPEG 압축은 크게 6단계로 이루어집니다.
 
 ## 단계별 메모리 비교
 
-원본 이미지: 773.00 KB
-YCbCr 분리: 3072.00 KB
-다운샘플링: 1536.00 KB
-양자화 후: 1536.00 KB
-RLE 후: 143.22 KB
-허프만 후: 20.64 KB
+1. 원본 이미지: 773.00 KB
+2. YCbCr 분리: 3072.00 KB
+3. 다운샘플링: 1536.00 KB
+4. 양자화 후: 1536.00 KB
+5. RLE 후: 143.22 KB
+6. 허프만 후: 20.64 KB
 
 ## 메모리 차지 해석
 - 원본은 RGB니까 int8로 저장되어있음(0~255니까)
@@ -75,9 +75,12 @@ RLE 후: 143.22 KB
 
 **원본 이미지**
 <img width="512" height="512" alt="Image" src="https://github.com/user-attachments/assets/f24cf9cc-f5ac-4fce-80de-6bf14e468835" />
+---
 
 **압축한 이미지**
 ![Image](https://github.com/user-attachments/assets/57bb4f8a-eeef-4d03-8258-b6e54000e195)
+
+---
 
 **비교사진**
 <img width="1000" height="500" alt="Image" src="https://github.com/user-attachments/assets/ef99e1de-f203-46bb-bb7f-5d06eba4192a" />
