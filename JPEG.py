@@ -7,7 +7,12 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import sys
 import os
-   
+import argparse
+def check_multiple_of_8(width, height):
+    """이미지 크기가 8의 배수인지 확인"""
+    if width % 8 != 0 or height % 8 != 0:
+        print(f"[경고] 이미지 크기 ({width}x{height})가 8의 배수가 아닙니다. "
+              "JPEG 블록 단위(8x8)에 맞게 패딩이 필요합니다.", file=sys.stderr)   
 def memory_kb(arrays):
     """넘파이 배열 리스트의 총 메모리 (KB)"""
     total = 0
@@ -295,9 +300,11 @@ def ycbcr_to_rgb(y, cb, cr):
     rgb = np.clip(rgb, 0, 255).astype(np.uint8)
     return rgb
 
-def main():
-    #이미지(512,512) 
-    img = Image.open("/mnt/hdd_6tb/bill0914/VLM_Research/CLIP/skimage/astronaut.png")
+def main(img_path):
+
+    img = Image.open(img_path)
+    width, height = img.size
+    check_multiple_of_8(width, height)
 
     #YCbCr 변환
     ycbcr_img = img.convert("YCbCr")
@@ -307,7 +314,7 @@ def main():
     Cb = np.array(Cb, dtype=np.float32)
     Cr = np.array(Cr, dtype=np.float32)
 
-    #Downsampliing (256,256)
+    #Downsampliing
     Cb_ds = Cb[::2, ::2]    
     Cr_ds = Cr[::2, ::2]
 
@@ -328,7 +335,7 @@ def main():
     Cr_bitstream, Cr_dc_codes, Cr_ac_codes = huffman_encode(Cr_encoded)
 
     # 메모리 차지 용량 비교
-    orig_size = os.path.getsize("/mnt/hdd_6tb/bill0914/VLM_Research/CLIP/skimage/astronaut.png") / 1024
+    orig_size = os.path.getsize(img_path) / 1024
     ycbcr_size = memory_kb([Y, Cb, Cr])
     downsampled_size = memory_kb([Y, Cb_ds, Cr_ds])
     quantized_size = memory_kb([Y_dctq, Cb_dctq, Cr_dctq])
@@ -377,9 +384,9 @@ def main():
     Cr_pixels = [IDCT(block) + 128 for block in Cr_dequant]
     
     # 이미지 재구성
-    Y_recon = reconstruct_image(Y_pixels, 512, 512)
-    Cb_recon = reconstruct_image(Cb_pixels, 256, 256)
-    Cr_recon = reconstruct_image(Cr_pixels, 256, 256)
+    Y_recon = reconstruct_image(Y_pixels, width, width)
+    Cb_recon = reconstruct_image(Cb_pixels, width//2, width//2)
+    Cr_recon = reconstruct_image(Cr_pixels, width//2, width//2)
     
     # YCbCr → RGB 변환
     rgb_recon = ycbcr_to_rgb(Y_recon, Cb_recon, Cr_recon)
@@ -394,8 +401,8 @@ def main():
     ax2.set_title("Reconstructed Image")
     ax2.axis("off")
     
-    plt.savefig("compare JPEG.png")
-    Image.fromarray(rgb_recon).save("reconstructed.jpeg")
+    plt.savefig("./compare JPEG.png")
+    Image.fromarray(rgb_recon).save("./reconstructed.jpeg")
 
 
     # PSNR 계산 (품질 비교)
@@ -404,4 +411,7 @@ def main():
     print(f"PSNR: {psnr:.2f} dB")
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="JPEG Compression Pipeline")
+    parser.add_argument("--image_path", type=str, help="입력 이미지 경로")
+    args = parser.parse_args()
+    main(args.image_path)

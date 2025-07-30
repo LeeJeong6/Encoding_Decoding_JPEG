@@ -52,9 +52,10 @@ JPEG 압축은 크게 6단계로 이루어집니다.
 
 ---
 
+
 ## 단계별 메모리 비교
 
-1. 원본 이미지: 773.00 KB
+1. 원본 이미지(512x512): 773.00 KB
 2. YCbCr 분리: 3072.00 KB
 3. 다운샘플링: 1536.00 KB
 4. 양자화 후: 1536.00 KB
@@ -85,3 +86,7 @@ JPEG 압축은 크게 6단계로 이루어집니다.
 **비교사진**
 <img width="1000" height="500" alt="Image" src="https://github.com/user-attachments/assets/ef99e1de-f203-46bb-bb7f-5d06eba4192a" />
 
+## 실행 방법
+
+```bash
+python JPEG.py --이미지경로
