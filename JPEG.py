@@ -309,7 +309,7 @@ def main(img_path):
 
     img = Image.open(img_path)
     width, height = img.size
-    check_multiple_of_8(width, height)
+    
 
     #YCbCr 변환
     ycbcr_img = img.convert("YCbCr")
@@ -323,7 +323,7 @@ def main(img_path):
     Y = pad_to_multiple_of_8(Y)
     Cb = pad_to_multiple_of_8(Cb)
     Cr = pad_to_multiple_of_8(Cr)
-    
+
     #Downsampliing
     Cb_ds = Cb[::2, ::2]    
     Cr_ds = Cr[::2, ::2]
