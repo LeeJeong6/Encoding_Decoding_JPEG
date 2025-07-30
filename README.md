@@ -87,6 +87,7 @@ JPEG 압축은 크게 6단계로 이루어집니다.
 <img width="1000" height="500" alt="Image" src="https://github.com/user-attachments/assets/ef99e1de-f203-46bb-bb7f-5d06eba4192a" />
 
 ## 실행 방법
+- 이미지가 정사각형이 아니면 오류가 발생합니다. 테스트 파일은 정사각형으로 해주세요
 ```bash
 pip install -r requirements.txt
 ```
