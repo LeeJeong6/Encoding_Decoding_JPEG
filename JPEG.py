@@ -8,11 +8,16 @@ import matplotlib.pyplot as plt
 import sys
 import os
 import argparse
-def check_multiple_of_8(width, height):
-    """이미지 크기가 8의 배수인지 확인"""
-    if width % 8 != 0 or height % 8 != 0:
-        print(f"[경고] 이미지 크기 ({width}x{height})가 8의 배수가 아닙니다. "
-              "JPEG 블록 단위(8x8)에 맞게 패딩이 필요합니다.", file=sys.stderr)   
+def pad_to_multiple_of_8(arr):
+    """입력 배열(arr)을 8의 배수 크기로 패딩"""
+    h, w = arr.shape
+    pad_h = (8 - h % 8) % 8
+    pad_w = (8 - w % 8) % 8
+    if pad_h == 0 and pad_w == 0:
+        return arr  # 이미 8의 배수이면 그대로 반환
+    padded = np.pad(arr, ((0, pad_h), (0, pad_w)), mode="edge")
+    print(f"[패딩 적용] 원본 크기 ({h}x{w}) → 패딩 후 ({padded.shape[0]}x{padded.shape[1]})")
+    return padded
 def memory_kb(arrays):
     """넘파이 배열 리스트의 총 메모리 (KB)"""
     total = 0
@@ -314,6 +319,11 @@ def main(img_path):
     Cb = np.array(Cb, dtype=np.float32)
     Cr = np.array(Cr, dtype=np.float32)
 
+    # 8의 배수가 아니면 패딩
+    Y = pad_to_multiple_of_8(Y)
+    Cb = pad_to_multiple_of_8(Cb)
+    Cr = pad_to_multiple_of_8(Cr)
+    
     #Downsampliing
     Cb_ds = Cb[::2, ::2]    
     Cr_ds = Cr[::2, ::2]

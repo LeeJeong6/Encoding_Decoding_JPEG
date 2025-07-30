@@ -15,7 +15,7 @@ JPEG 압축은 크게 6단계로 이루어집니다.
    - RGB 이미지를 사람의 시각 특성에 맞게 Y (밝기), Cb/Cr (색차) 성분으로 변환합니
    - 밝기에 민감하고 색차에는 둔감한 인간의 눈 특성을 활용하기 위함
 
-2. **다운샘플링 (Subsampling)**
+2. **다운샘플링 (Downsampling)**
    - Cb, Cr 채널을 2x2 블록 단위로 줄여 해상도를 절반으로 축소합니다.  
    - 예: 512×512 → 256×256
    - 데이터 양을 크게 줄이는 핵심 단계
@@ -87,6 +87,11 @@ JPEG 압축은 크게 6단계로 이루어집니다.
 <img width="1000" height="500" alt="Image" src="https://github.com/user-attachments/assets/ef99e1de-f203-46bb-bb7f-5d06eba4192a" />
 
 ## 실행 방법
-
+```bash
+pip install -r requirements.txt
+```
 ```bash
 python JPEG.py --이미지경로
+```
+
+
