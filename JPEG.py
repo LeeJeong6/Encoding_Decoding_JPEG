@@ -308,8 +308,8 @@ def ycbcr_to_rgb(y, cb, cr):
 def main(img_path):
 
     img = Image.open(img_path)
+    img = img.resize((1024,1024))
     width, height = img.size
-    
 
     #YCbCr 변환
     ycbcr_img = img.convert("YCbCr")
@@ -318,7 +318,7 @@ def main(img_path):
     Y = np.array(Y, dtype=np.float32)
     Cb = np.array(Cb, dtype=np.float32)
     Cr = np.array(Cr, dtype=np.float32)
-
+    
     # 8의 배수가 아니면 패딩
     Y = pad_to_multiple_of_8(Y)
     Cb = pad_to_multiple_of_8(Cb)
@@ -338,7 +338,7 @@ def main(img_path):
     Y_encoded = jpeg_encode(Y_dctq)
     Cb_encoded = jpeg_encode(Cb_dctq)
     Cr_encoded = jpeg_encode(Cr_dctq)
-    
+
     # Huffman 인코딩
     Y_bitstream, Y_dc_codes, Y_ac_codes = huffman_encode(Y_encoded)
     Cb_bitstream, Cb_dc_codes, Cb_ac_codes = huffman_encode(Cb_encoded)
