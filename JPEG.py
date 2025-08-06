@@ -308,7 +308,6 @@ def ycbcr_to_rgb(y, cb, cr):
 def main(img_path):
 
     img = Image.open(img_path)
-    img = img.resize((1024,1024))
     width, height = img.size
 
     #YCbCr 변환
